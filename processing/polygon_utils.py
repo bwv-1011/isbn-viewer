@@ -106,6 +106,7 @@ def calculate_polygon_label_position(polygon_points):
     ym = (y1 * 2 + y2) / 3
     return (xm, ym)
 
+
 def merge_polygons(polygons):
     merged = unary_union(polygons)
 
@@ -116,11 +117,12 @@ def merge_polygons(polygons):
 
 
 def merge_geojson_polygons(
-    geojson_polygons: geojson.FeatureCollection,
+    polygons: geojson.FeatureCollection,
 ) -> geojson.FeatureCollection:
-    # merge polygons with same id
+    # merge polygons with same id and shared border
+
     polygons_per_id = defaultdict(lambda: [])
-    for feature in geojson_polygons["features"]:
+    for feature in polygons["features"]:
         polygons_per_id[feature.id].append(feature)
 
     new_feature_collection = []
@@ -136,7 +138,7 @@ def merge_geojson_polygons(
                         geometry=geojson.Polygon(
                             [[[x, y] for x, y in (x.exterior.coords)]]
                         ),
-                        properties={"name": features[0].properties["name"]},
+                        properties=features[0].properties,
                     )
                 )
         else:
