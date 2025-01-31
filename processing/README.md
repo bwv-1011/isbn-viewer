@@ -29,10 +29,21 @@ $ uv run create_raster_tiles.py
 $ uv run create_country_polygons.py
 ```
 
+## Build country vector tiles
+
+Get the latest file (annas_archive_meta__aacid__isbngrp_records) and place in data folder. Don't worry, it won't take as long as tqdm thinks it does. 
+
+```console
+$ uv run preprocess_isbn_groups.py
+$ uv run create_groups_polygons.py
+```
+
 ## Build holding extrusion vector tiles
+
+As input I used encoded holding information like this per line: `[isbn_position, holding_count]`
 
 ```console
 $ uv run create_holding_polygons.py
 ```
 
-Finally copy all pmtiles files from output/pmtiles into public folder. 
+Finally copy all pmtiles files from output/pmtiles into the public folder. 

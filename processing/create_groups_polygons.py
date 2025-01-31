@@ -32,7 +32,7 @@ def create_polygon_labels(feature_collection, n_prefix):
                 properties=feature.properties,
                 tippecanoe={
                     "minzoom": n_prefix_to_zoom_level(n_prefix),
-                    "maxzoom": 9,
+                    "maxzoom": 13,
                 },
             )
         )
