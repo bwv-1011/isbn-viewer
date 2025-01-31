@@ -1,0 +1,229 @@
+#map-body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-size: 12px;
+  line-height: 1.5;
+  overflow-x: hidden;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+#map {
+  width: 100vw;
+  height: 100vh;
+}
+
+.button-container {
+  display: flex;
+  position: relative;
+}
+
+.tooltip {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #333;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 14px;
+  white-space: nowrap;
+  margin-top: 5px;
+}
+
+@media (min-width: 768px) {
+  .button-container:hover .tooltip {
+    display: block;
+  }
+}
+
+.menu-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 28px;
+  height: 28px;
+  border: 1px solid rgb(116, 116, 116);
+  border-radius: 0.25rem;
+  cursor: pointer;
+  background-color: black;
+}
+
+.menu-button.active {
+  border-color: white;
+}
+
+.menu-button.active svg {
+  fill: white;
+}
+
+.menu-button svg {
+  width: 28px;
+  height: 28px;
+  margin-left: -4px;
+  margin-right: -4px;
+}
+
+
+
+.legend {
+  display: block;
+  z-index: 1;
+  background-color: black;
+  bottom: 0;
+  left: 0;
+  margin: 12px;
+  position: fixed;
+  border: 1px solid rgb(116, 116, 116);
+  border-radius: 0.25rem;
+  color: rgb(116, 116, 116);
+  padding: 5px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  padding: 2px;
+}
+
+.color-box {
+  width: 10px;
+  height: 10px;
+  margin-right: 5px;
+}
+
+.published {
+  background-color: rgb(160, 36, 4);
+}
+
+.archived {
+  background-color: rgb(191, 191, 191);
+}
+
+.isbn-viewer-controls {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  z-index: 1;
+  position: fixed;
+  left: calc(50% - 131px);
+  top: 0;
+  margin-top: 6px;
+}
+
+#isbn-input {
+  width: 180px;
+  border: 1px solid rgb(116, 116, 116);
+  padding: 1px 5px 1px;
+  font-size: 1.2em;
+  color: rgb(116, 116, 116);
+  height: 22px;
+  border-radius: 0.25rem;
+  background-color: black;
+  transition: outline 0.3s ease;
+  transition: border-color 0.3s ease;
+  caret-color: white;
+}
+
+#isbn-input.invalid {
+  border-color: rgb(211, 0, 0);
+  outline: 2px solid rgb(211, 0, 0);
+}
+
+#isbn-input:focus {
+  outline: 2px solid white;
+}
+
+#isbn-input:focus.invalid {
+  border-color: rgb(211, 0, 0);
+  outline: 2px solid rgb(211, 0, 0);
+}
+
+.maplibregl-popup-anchor-top > .maplibregl-popup-tip,
+.maplibregl-popup-anchor-top-left > .maplibregl-popup-tip,
+.maplibregl-popup-anchor-top-right > .maplibregl-popup-tip {
+  border-bottom-color: rgba(33, 33, 33, 0.7);
+}
+
+.maplibregl-popup-anchor-left > .maplibregl-popup-tip {
+  border-right-color: rgba(33, 33, 33, 0.7);
+}
+
+.maplibregl-popup-anchor-bottom > .maplibregl-popup-tip,
+.maplibregl-popup-anchor-bottom-left > .maplibregl-popup-tip,
+.maplibregl-popup-anchor-bottom-right > .maplibregl-popup-tip {
+  border-top-color: rgba(33, 33, 33, 0.7);
+}
+
+.maplibregl-popup-anchor-right > .maplibregl-popup-tip {
+  border-left-color: rgba(33, 33, 33, 0.7);
+}
+
+.click-popup {
+  color: white;
+  font-size: 0.875rem;
+  line-height: 1.5rem;
+}
+
+#search-button {
+  text-decoration: none;
+  outline: none;
+  color: rgb(211, 0, 0);
+}
+
+#search-button:hover {
+  color: red;
+}
+
+.click-popup > .maplibregl-popup-content {
+  background-color: rgba(33, 33, 33, 1);
+}
+
+.maplibregl-popup-close-button {
+  font-size: 24px;
+  right: -2%;
+  top: -6%;
+  color: white;
+}
+
+.maplibregl-popup {
+  max-width: 1000px !important;
+}
+
+.hover-popup {
+  color: white;
+  font-size: 0.875rem;
+}
+
+.hover-popup > .maplibregl-popup-content {
+  pointer-events: none;
+  background-color: rgba(33, 33, 33, 0.7);
+}
+
+.menu-content {
+  display: none;
+  position: absolute;
+  background: black;
+  min-width: 200px;
+  z-index: 1;
+  border: 1px solid rgb(116, 116, 116);
+  border-radius: 0.25rem;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+.menu-content a {
+  display: block;
+  padding: 10px;
+  text-decoration: none;
+  color: white;
+  cursor: pointer;
+}
+.menu-content a:hover, .menu-content a.selected {
+  background: #6a6a6a;
+}

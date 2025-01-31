@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <title>ISBN Viewer</title>
+    <script src="https://unpkg.com/pmtiles@4.2.1/dist/pmtiles.js"></script>
+    <script src="https://unpkg.com/hilbert-curve@2.0.5"></script>
+    <script src="https://unpkg.com/maplibre-gl@5.1.0/dist/maplibre-gl.js"></script>
+    <link href="https://unpkg.com/maplibre-gl@5.1.0/dist/maplibre-gl.css" rel="stylesheet" />
+    <link rel="stylesheet" href="public/style.css" />
+  </head>
+  <body id="map-body">
+    <div id="map">
+      <div class="legend" id="legend">
+        <div class="legend-item">
+          <div class="color-box published"></div>
+          <span>published</span>
+        </div>
+        <div class="legend-item">
+          <div class="color-box archived"></div>
+          <span>archived</span>
+        </div>
+      </div>
+      <div class="isbn-viewer-controls">
+        <div class="button-container">
+          <button id="menu-button" class="menu-button">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="rgb(116, 116, 116)">
+              <path d="M3,6H21V8H3V6M3,11H21V13H3V11M3,16H21V18H3V16Z" />
+            </svg>
+          </button>
+
+          <div class="menu-content" id="dropdown">
+            <div class="menu-content"></div>
+          </div>
+        </div>
+
+        <input id="isbn-input" type="text" name="isbn" placeholder="Enter ISBN13" />
+        <div class="button-container">
+          <button id="rare-book-view" class="menu-button">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="rgb(116, 116, 116)">
+              <path
+                d="M17.8,20C17.4,21.2 16.3,22 15,22H5C3.3,22 2,20.7 2,19V18H5L14.2,18C14.6,19.2 15.7,20 17,20H17.8M19,2H8C6.3,2 5,3.3 5,5V16H16V17C16,17.6 16.4,18 17,18H18V5C18,4.4 18.4,4 19,4C19.6,4 20,4.4 20,5V6H22V5C22,3.3 20.7,2 19,2Z"
+              />
+            </svg>
+          </button>
+          <div class="tooltip">Toggle Rare Book View</div>
+        </div>
+      </div>
+    </div>
+    <script src="public/isbn-viewer.js"></script>
+  </body>
+</html>
