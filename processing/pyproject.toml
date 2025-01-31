@@ -1,0 +1,25 @@
+[project]
+name = "processing"
+version = "0.1.0"
+description = ""
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "bencode-py>=4.0.0",
+    "geojson>=3.2.0",
+    "isbnlib>=3.10.14",
+    "numpy>=2.2.2",
+    "numpy-hilbert-curve>=1.0.1",
+    "pillow>=11.1.0",
+    "pmtiles>=3.4.1",
+    "pyvips>=2.2.3",
+    "scipy>=1.15.1",
+    "shapely>=2.0.7",
+    "tqdm>=4.67.1",
+    "zstandard>=0.23.0",
+]
+
+[dependency-groups]
+lint = [
+    "ruff>=0.9.3",
+]
