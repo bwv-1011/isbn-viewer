@@ -26,16 +26,16 @@ $ uv run create_raster_tiles.py
 ## Build country vector tiles
 
 ```console
-$ uv run create_country_polygons.py
+$ uv run create_country_vector_tiles.py
 ```
 
-## Build country vector tiles
+## Build group vector tiles
 
-Get the latest file (annas_archive_meta__aacid__isbngrp_records) and place in data folder. Don't worry, it won't take as long as tqdm thinks it does. 
+Get the latest file (annas_archive_meta__aacid__isbngrp_records) and place in data folder.
 
 ```console
-$ uv run preprocess_isbn_groups.py
 $ uv run create_groups_polygons.py
+$ uv run create_groups_vector_tiles.py
 ```
 
 ## Build holding extrusion vector tiles

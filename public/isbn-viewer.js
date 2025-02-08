@@ -7,7 +7,7 @@ async function initMap() {
       container: "map",
       style: style,
       attributionControl: false,
-      maxZoom: 12.5,
+      maxZoom: 13.5,
       bounds: [
         [-95.0, 40.97989806962013],
         [99.32, -42.59036211036585],
@@ -117,36 +117,41 @@ async function initMap() {
       "group-3-fill": {
         minZoom: 3.2,
         targetLayers: [
-          { source: "groups", sourceLayer: "groups_3" },
-          { source: "groups", sourceLayer: "groups_labels_3" },
+          { source: "groups_3", sourceLayer: "groups_3" },
+          { source: "groups_3", sourceLayer: "groups_3_labels" },
         ],
       },
       "group-4-fill": {
         minZoom: 5.2,
         targetLayers: [
-          { source: "groups4", sourceLayer: "groups_4" },
-          { source: "groups4", sourceLayer: "groups_labels_4" },
+          { source: "groups_4", sourceLayer: "groups_4" },
+          { source: "groups_4", sourceLayer: "groups_4_labels" },
         ],
       },
       "group-5-fill": {
         minZoom: 6,
         targetLayers: [
-          { source: "groups5", sourceLayer: "groups_5" },
-          { source: "groups5", sourceLayer: "groups_labels_5" },
+          { source: "groups_5", sourceLayer: "groups_5" },
+          { source: "groups_5", sourceLayer: "groups_5_labels" },
         ],
       },
       "group-6-fill": {
         minZoom: 8,
         targetLayers: [
-          { source: "groups6", sourceLayer: "groups_6" },
-          { source: "groups6", sourceLayer: "groups_labels_6" },
+          { source: "groups_6", sourceLayer: "groups_6" },
+          { source: "groups_5", sourceLayer: "groups_6_labels" },
         ],
       },
       "group-7-fill": {
         minZoom: 9,
         targetLayers: [
-          { source: "groups7", sourceLayer: "groups_7" },
-          { source: "groups7", sourceLayer: "groups_labels_7" },
+          { source: "groups_7", sourceLayer: "groups_7" },
+        ],
+      },
+      "group-8-fill": {
+        minZoom: 10,
+        targetLayers: [
+          { source: "groups_8", sourceLayer: "groups_8" },
         ],
       },
       "holding-extrusion": {

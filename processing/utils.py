@@ -1,5 +1,6 @@
-import math
 import hashlib
+import math
+
 import numpy as np
 from hilbert import decode
 
@@ -17,7 +18,7 @@ def hilbert_rectangle_projection(values: list[int]) -> np.array:
     return result
 
 
-def project_x_y_to_coordinate(x:int, y:int) -> [float, float]:
+def project_x_y_to_coordinate(x: int, y: int) -> [float, float]:
     lng = x * 360 / (128 * 1000) + (32 / (2**7) * 360 - 180)
     lat = math.degrees(
         math.atan(math.sinh(math.pi * (1 - (2 * (48 + y / 1000)) / (2**7))))
@@ -25,7 +26,7 @@ def project_x_y_to_coordinate(x:int, y:int) -> [float, float]:
     return lng, lat
 
 
-def string_to_number(name:str) -> int:
+def string_to_number(name: str) -> int:
     hash_object = hashlib.sha256(name.encode())
     return int(hash_object.hexdigest(), 16) % (10**9)
 
@@ -36,8 +37,9 @@ def n_prefix_to_zoom_level(n_prefix) -> int:
         2: 3,
         3: 4,
         4: 6,
-        5: 8,
-        6: 10,
-        7: 11,
+        5: 7,
+        6: 7,
+        7: 7,
+        8: 7,
     }
     return translation[int(n_prefix)]

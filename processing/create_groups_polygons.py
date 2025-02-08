@@ -1,100 +1,66 @@
-from shapely import Polygon
-from pathlib import Path
-import geojson
-from tqdm import tqdm
-from polygon_utils import merge_geojson_polygons
+import json
 from collections import defaultdict
-import subprocess
+from pathlib import Path
 
-from polygon_utils import calculate_polygon_label_position
-from utils import n_prefix_to_zoom_level
+import geojson
+from polygon_utils import isbn_position_range_to_polygon
+from tqdm import tqdm
+from utils import project_x_y_to_coordinate, string_to_number
 
-
-def strip_properties(geojson_data):
-    stripped_features = []
-    for feature in geojson_data.features:
-        stripped_feature = geojson.Feature(id=feature.id, geometry=feature.geometry)
-        stripped_features.append(stripped_feature)
-
-    return geojson.FeatureCollection(stripped_features)
-
-
-def create_polygon_labels(feature_collection, n_prefix):
-    label_features = []
-    for feature in feature_collection["features"]:
-        label_coordinates = calculate_polygon_label_position(
-            feature.geometry.coordinates[0]
-        )
-        label_features.append(
-            geojson.Feature(
-                id=feature.id,
-                geometry=geojson.Point(label_coordinates),
-                properties=feature.properties,
-                tippecanoe={
-                    "minzoom": n_prefix_to_zoom_level(n_prefix),
-                    "maxzoom": 13,
-                },
-            )
-        )
-    return geojson.FeatureCollection(label_features)
-
-
-zoom_levels = {3: [0, 7], 4: [0, 7], 5: [0, 7], 6: [4, 9], 7: [6, 9]}
+geojson.geometry.DEFAULT_PRECISION = 18
 
 
 if __name__ == "__main__":
+    input_file = "data/annas_archive_meta__aacid__isbngrp_records__20240920T194930Z--20240920T194930Z.jsonl.seekable"
+
     output_folder = Path("output") / "groups"
     output_folder.mkdir(parents=True, exist_ok=True)
 
-    pmtiles_folder = Path("output") / "pmtiles"
-    pmtiles_folder.mkdir(parents=True, exist_ok=True)
+    groups_prefixes = defaultdict(lambda: defaultdict(lambda: []))
 
-    features = []
-    for n in range(6, 11):
-        with open(output_folder / f"groups{n}.geojson") as f:
-            gj = geojson.load(f)
-            features.extend(gj["features"])
+    with open(input_file) as f:
+        for line in tqdm(f, total=2744530, desc="Sorting by prefix"):
+            data = json.loads(line)
 
-    all_polygons = geojson.FeatureCollection(features)
-    merged_polygons = merge_geojson_polygons(all_polygons)
+            for x in data["metadata"]["record"]["isbns"]:
+                if x["isbn_type"] == "prefix":
+                    if data["metadata"]["record"]["registrant_name"]:
+                        isbn_prefix = x["isbn"].replace("-", "")
+                        if len(isbn_prefix) > 11:
+                            continue
+                        groups_prefixes[len(isbn_prefix)][isbn_prefix].append(
+                            data["metadata"]["record"]["registrant_name"]
+                        )
 
-    areas = []
+    with open(output_folder / "groups.geojsonl", "w") as f:
+        for prefix_length, prefixes in groups_prefixes.items():
+            for prefix, names in tqdm(
+                prefixes.items(),
+                desc=f"Creating polygons for prefix length {prefix_length}",
+            ):
+                min_isbn = str(prefix).ljust(12, "0")
+                max_isbn = str(prefix).ljust(12, "9")
 
-    groups = defaultdict(lambda: [])
+                min_position = int(min_isbn) - 978000000000
+                max_position = int(max_isbn) - 978000000000
 
-    for polygon in tqdm(merged_polygons["features"]):
-        x = Polygon(polygon.geometry.coordinates[0])
+                polygon_points = isbn_position_range_to_polygon(
+                    min_position, max_position
+                )
 
-        area = x.area
+                coordinates = [
+                    project_x_y_to_coordinate(int(x), int(y))
+                    for (x, y) in polygon_points
+                ]
 
-        if area > 6:
-            groups[3].append(polygon)
-        elif area > 0.58:
-            groups[4].append(polygon)
-        elif area > 0.058:
-            groups[5].append(polygon)
-        elif area > 0.0058:
-            groups[6].append(polygon)
-        else:
-            groups[7].append(polygon)
+                main_name = min(names, key=len)
+                names.remove(main_name)
 
-    for n_prefix, features in groups.items():
-        feature_collection = geojson.FeatureCollection(features)
+                feature = geojson.Feature(
+                    id=string_to_number(main_name),
+                    geometry=geojson.Polygon([coordinates]),
+                    properties={"name": main_name, "additional_names": ";".join(names)},
+                )
 
-        label_feature_collection = create_polygon_labels(feature_collection, n_prefix)
-        label_features_filepath = output_folder / f"groups_{n_prefix}_labels.geojson"
-        with open(label_features_filepath, "w") as f:
-            geojson.dump(label_feature_collection, f)
-
-        border_features_filepath = output_folder / f"groups_{n_prefix}.geojson"
-        with open(border_features_filepath, "w") as f:
-            geojson.dump(strip_properties(feature_collection), f)
-
-        min_zoom, max_zoom = zoom_levels[n_prefix]
-
-        pmtiles_filepath = pmtiles_folder / f"groups_{n_prefix}.pmtiles"
-
-        subprocess.run(
-            f"tippecanoe -z{max_zoom} -Z{min_zoom} -f -o {pmtiles_filepath} {border_features_filepath} {label_features_filepath}",
-            shell=True,
-        )
+                geojson.dump(feature, f)
+                f.write("\n")
